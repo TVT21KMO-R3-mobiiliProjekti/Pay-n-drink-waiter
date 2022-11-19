@@ -2,6 +2,7 @@ package com.example.payndrink.database
 
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.ResultSet
 import java.sql.SQLException
 
 //restaurant model class
