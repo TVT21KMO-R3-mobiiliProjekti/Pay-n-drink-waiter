@@ -2,6 +2,8 @@ package com.example.payndrink.database
 
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.ResultSet
+import java.sql.SQLException
 
 //restaurant model class
 data class Restaurant(
@@ -22,7 +24,7 @@ data class Waiter(val id: Int, val firstName: String?, val lastName: String?, va
 
 //order model class
 data class Order(val id: Int, val price: Double, val placed: Long?, val fulfilled: Long?,
-                 val refund: Double?, val refundReason: String?, val seat: Int?, val waiterID: Int?)
+                 val refund: Double?, val refundReason: String?, val seat: Int, val waiterID: Int?)
 
 //order has items model class
 data class OrderHasItems(val id: Int, val quantity: Int, val delivered: Int?,
@@ -36,11 +38,17 @@ class DatabaseAccess {
                     "tvt21kmo_r3_mobiiliprojekti"
         val userName = "tvt21kmo_r3"
         val password = "H9V1M6gtYtQmWg6nJiqU0sstkCs2LxTl"
-        return DriverManager.getConnection(jdbcUrl, userName, password)
+        var connection: Connection? = null
+        try{
+            connection = DriverManager.getConnection(jdbcUrl, userName, password)
+        }catch(e: SQLException){
+            println(e.toString())
+        }
+        return connection
     }
 
     fun getItemsInOrder(connection: Connection, orderID: Int): MutableList<OrderHasItems>{
-        val query = "SELECT * FROM  WHERE id_order=$orderID"
+        val query = "SELECT * FROM order_has_items WHERE id_order=$orderID"
         val result = connection.prepareStatement(query).executeQuery()
         val items = mutableListOf<OrderHasItems>()
         while(result.next()){
@@ -64,10 +72,10 @@ class DatabaseAccess {
         return name;
     }
 
-    fun getSeatByID(connection: Connection, seatID:Int): Int?{
+    fun getSeatByID(connection: Connection, seatID:Int): Int{
         val query = "SELECT item_name FROM item WHERE id_item=$seatID"
         val result = connection.prepareStatement(query).executeQuery()
-        var seat:Int? = null
+        var seat = 0
         while(result.next()){
             seat = result.getInt("seat")
         }
@@ -104,5 +112,21 @@ class DatabaseAccess {
             orders.add(Order(id, price, placed, null, refund, refundReason, seat, null))
         }
         return orders
+    }
+
+    fun getWaiterByID(connection: Connection, waiterID: Int): Waiter?{
+        val query = "SELECT * FROM waiter WHERE id_waiter=$waiterID"
+        val result = connection.prepareStatement(query).executeQuery()
+        var waiter: Waiter? = null
+        while (result.next()){
+            val id = waiterID
+            val firstName = result.getString("first_name")
+            val lastName = result.getString("last_name")
+            val pictureUrl = result.getString("picture_url")
+            val description = result.getString("waiter_description")
+            val restaurantID = result.getInt("id_restaurant")
+            waiter = Waiter(id, firstName, lastName, description, pictureUrl, restaurantID)
+        }
+        return waiter
     }
 }
