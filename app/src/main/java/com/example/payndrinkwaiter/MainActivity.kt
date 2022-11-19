@@ -12,6 +12,7 @@ import com.example.payndrink.database.Waiter
 import com.example.payndrinkwaiter.data.Adapter.OrderItemAdapter
 import com.example.payndrinkwaiter.data.model.OrderItem
 import java.sql.Connection
+import android.os.StrictMode
 
 class MainActivity : AppCompatActivity() {
     private val dbAccess = DatabaseAccess()
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().detectNetwork().permitAll().penaltyLog().build()) //DEBUGGING
         setContentView(R.layout.activity_main)
         connection = dbAccess.connectToDatabase()
         if(connection != null){

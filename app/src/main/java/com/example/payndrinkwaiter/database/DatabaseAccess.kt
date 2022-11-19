@@ -72,11 +72,11 @@ class DatabaseAccess {
     }
 
     fun getSeatByID(connection: Connection, seatID:Int): Int{
-        val query = "SELECT item_name FROM item WHERE id_item=$seatID"
+        val query = "SELECT seat_number FROM seating WHERE id_seating=$seatID"
         val result = connection.prepareStatement(query).executeQuery()
         var seat = 0
         while(result.next()){
-            seat = result.getInt("seat")
+            seat = result.getInt("seat_number")
         }
         return seat
     }
