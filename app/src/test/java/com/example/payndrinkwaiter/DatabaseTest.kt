@@ -8,6 +8,6 @@ class DatabaseUnitTest {
     @Test
     fun connectionTest(){
         val dbAccess = DatabaseAccess()
-        assertEquals(true, dbAccess.connectToDatabase()!!.isValid(0))
+        assertNotNull(dbAccess.connectToDatabase())
     }
 }
