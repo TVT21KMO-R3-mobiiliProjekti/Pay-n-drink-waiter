@@ -13,6 +13,7 @@ import com.example.payndrink.database.Waiter
 import com.example.payndrinkwaiter.data.Adapter.OrderItemAdapter
 import com.example.payndrinkwaiter.data.model.OrderItem
 import java.sql.Connection
+import android.os.StrictMode
 
 class MainActivity : AppCompatActivity() {
     private val dbAccess = DatabaseAccess()
