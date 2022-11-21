@@ -3,6 +3,9 @@ package com.example.payndrinkwaiter.data.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -38,9 +41,9 @@ class FoodItemAdapter (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val orderTime = Date(orderItemList[position].placed)
-        holder.tvOrderTable.text = orderItemList[position].seat.toString()
-        holder.tvOrderTime.text = orderTime.toString()
+        holder.tvQuantity.text = foodItemList[position].quantity.toString()
+        holder.tvFoodName.text = foodItemList[position].itemName
+        holder.ivFood.setImageBitmap(foodItemList[position].picture)
         items.add(holder.card)
     }
     inner class ViewHolder
@@ -48,8 +51,12 @@ class FoodItemAdapter (
         itemView: View,
         listener: OnItemClickListener
     ): RecyclerView.ViewHolder(itemView){
-        val tvOrderTime: TextView = itemView.findViewById(R.id.tv_order_time)
-        val tvOrderTable: TextView = itemView.findViewById(R.id.tv_order_table)
+        val tvQuantity: TextView = itemView.findViewById(R.id.tv_quantity)
+        val tvFoodName: TextView = itemView.findViewById(R.id.tv_food_name)
+        val ivFood: ImageView = itemView.findViewById(R.id.iv_food)
+        val bPlus: Button = itemView.findViewById(R.id.b_plus)
+        val bMinus: Button = itemView.findViewById(R.id.b_minus)
+        val etQuantity: EditText = itemView.findViewById(R.id.et_quantity)
         val card: CardView = itemView.findViewById(R.id.cv_orders)
 
         init{

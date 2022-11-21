@@ -1,5 +1,6 @@
 package com.example.payndrinkwaiter.data.model
 
+import android.graphics.Color
 import java.sql.Date
 
 data class OrderItem(

@@ -1,5 +1,6 @@
 package com.example.payndrinkwaiter
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -13,6 +14,7 @@ import com.example.payndrinkwaiter.data.Adapter.OrderItemAdapter
 import com.example.payndrinkwaiter.data.model.OrderItem
 import java.sql.Connection
 import android.os.StrictMode
+import androidx.core.graphics.toColor
 
 class MainActivity : AppCompatActivity() {
     private val dbAccess = DatabaseAccess()
@@ -42,9 +44,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addOrdersToView(){
+        lateinit var color: Color
         for(order in orders){
             if(order.fulfilled == null && order.placed != null && (order.waiterID == null ||
                         order.waiterID == waiterID)){
+                if(order.waiterID == waiterID){
+
+                }
                 orderList += OrderItem(order.id, order.price, order.placed, null, order.seat,
                     waiterID)
 

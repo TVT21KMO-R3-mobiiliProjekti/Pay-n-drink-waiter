@@ -1,5 +1,6 @@
 package com.example.payndrinkwaiter.data.Adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.payndrinkwaiter.R
 import com.example.payndrinkwaiter.data.model.OrderItem
 import java.sql.Date
+import java.sql.Time
 import java.sql.Timestamp
 
 class OrderItemAdapter (
@@ -40,9 +42,10 @@ class OrderItemAdapter (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val orderTime = Date(orderItemList[position].placed)
+        val orderTime = Time(orderItemList[position].placed)
         holder.tvOrderTable.text = orderItemList[position].seat.toString()
         holder.tvOrderTime.text = orderTime.toString()
+        holder.card.setBackgroundColor(Color.GREEN)
         items.add(holder.card)
     }
     inner class ViewHolder
