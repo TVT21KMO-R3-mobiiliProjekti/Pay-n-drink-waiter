@@ -1,4 +1,4 @@
-package com.example.payndrink.database
+package com.example.payndrinkwaiter.database
 
 import java.sql.Connection
 import java.sql.DriverManager
@@ -48,11 +48,11 @@ class DatabaseAccess {
     }
 
     fun getItemsInOrder(connection: Connection, orderID: Int): MutableList<OrderHasItems>{
-        val query = "SELECT * FROM order_has_items WHERE id_order=$orderID"
+        val query = "SELECT * FROM order_has_item WHERE id_order=$orderID"
         val result = connection.prepareStatement(query).executeQuery()
         val items = mutableListOf<OrderHasItems>()
         while(result.next()){
-            val id = result.getInt("id_order_has_items")
+            val id = result.getInt("id_order_has_item")
             val quantity = result.getInt("quantity")
             val delivered = result.getInt("delivered")
             val itemID = result.getInt("id_item")
@@ -90,7 +90,7 @@ class DatabaseAccess {
             val id = result.getInt("id_order")
             val price = result.getDouble("order_price")
             val placed = result.getLong("order_placed")
-            val fulfilled = result.getLong("order_fulfilled")
+            val fulfilled = result.getLong("order_fullfilled")
             val refund = result.getDouble("refund")
             val refundReason = result.getString("refund_reason")
             val seat = getSeatByID(connection, result.getInt("id_seating"))
@@ -99,7 +99,7 @@ class DatabaseAccess {
         return orders
     }
     fun getNewOrders(connection: Connection): MutableList<Order>?{
-        val query = "SELECT * FROM orders WHERE id_waiter IS NULL AND order_placed IS NOT NULL"
+        val query = "SELECT * FROM orders WHERE order_fullfilled IS NULL AND order_placed IS NOT NULL"
         val result = connection.prepareStatement(query).executeQuery()
         val orders = mutableListOf<Order>()
         while(result.next()){
@@ -109,7 +109,8 @@ class DatabaseAccess {
             val refund = result.getDouble("refund")
             val refundReason = result.getString("refund_reason")
             val seat = getSeatByID(connection, result.getInt("id_seating"))
-            orders.add(Order(id, price, placed, null, refund, refundReason, seat, null))
+            val waiter = result.getInt("id_waiter")
+            orders.add(Order(id, price, placed, null, refund, refundReason, seat, waiter))
         }
         return orders
     }
@@ -128,5 +129,54 @@ class DatabaseAccess {
             waiter = Waiter(id, firstName, lastName, description, pictureUrl, restaurantID)
         }
         return waiter
+    }
+
+    fun getItemPrice(connection: Connection, itemID: Int): Double?{
+        var price: Double? = null
+        val query = "SELECT price FROM item WHERE id_item=$itemID"
+        val result = connection.prepareStatement(query).executeQuery()
+        while(result.next()){
+            price = result.getDouble("price")
+        }
+        return price
+    }
+
+    fun getOrderItemQty(connection: Connection, orderID: Int, itemID: Int): Int? {
+        var quantity : Int = 0
+        val query = "SELECT quantity FROM order_has_item WHERE id_order=$orderID and id_item=$itemID"
+        val result : ResultSet = connection.prepareStatement(query).executeQuery()
+        while (result.next()) quantity = result.getInt("quantity")
+        return quantity
+    }
+
+    fun acceptOrder(connection: Connection, orderID: Int, waiterID: Int): Int{
+        var id = 0
+        val query = "UPDATE orders SET id_waiter=$waiterID WHERE id_order=$orderID RETURNING id_seating"
+        val result = connection.prepareStatement(query).executeQuery()
+        while(result.next()){
+            id = result.getInt("id_seating")
+        }
+        return id
+    }
+
+    fun rejectOrder(connection: Connection, orderID: Int, waiterID: Int, refund: Double): Int{
+        var id = 0
+        val query = "UPDATE orders SET id_waiter=$waiterID, refund=$refund, refund_reason='Rejected' WHERE id_order=$orderID RETURNING id_seating"
+        val result = connection.prepareStatement(query).executeQuery()
+        while(result.next()){
+            id = result.getInt("id_seating")
+        }
+        return id
+    }
+
+    fun fullfillOrder(connection: Connection, orderID: Int): Int?{
+        var id: Int? = null
+        val orderTime = System.currentTimeMillis()
+        val query = "UPDATE orders SET order_fullfilled=$orderTime WHERE id_order=$orderID RETURNING id_seating"
+        val result = connection.prepareStatement(query).executeQuery()
+        while(result.next()){
+            id = result.getInt("id_seating")
+        }
+        return id
     }
 }

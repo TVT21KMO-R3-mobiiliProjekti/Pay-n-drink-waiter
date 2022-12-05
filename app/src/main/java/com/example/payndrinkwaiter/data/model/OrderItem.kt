@@ -1,6 +1,6 @@
 package com.example.payndrinkwaiter.data.model
 
-import java.sql.Date
+import android.graphics.Color
 
 data class OrderItem(
     val id: Int,
@@ -8,5 +8,6 @@ data class OrderItem(
     val placed: Long,
     val fulfilled: Long?,
     val seat: Int,
-    val waiter: Int?
+    val waiter: Int?,
+    val accepted: Boolean?
 )

@@ -1,4 +1,4 @@
-package com.example.payndrinkwaiter.data.Adapter
+package com.example.payndrinkwaiter.data.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,11 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.payndrinkwaiter.R
 import com.example.payndrinkwaiter.data.model.OrderItem
-import java.sql.Date
-import java.sql.Timestamp
+import java.sql.Time
 
 class OrderItemAdapter (
     private val orderItemList: List<OrderItem>
@@ -40,9 +38,16 @@ class OrderItemAdapter (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val orderTime = Date(orderItemList[position].placed)
+        val orderTime = Time(orderItemList[position].placed)
         holder.tvOrderTable.text = orderItemList[position].seat.toString()
         holder.tvOrderTime.text = orderTime.toString()
+        holder.tvOrderPrice.text = String.format("Price: %.2f€", orderItemList[position].price)
+        if(orderItemList[position].accepted == true){
+            holder.tvOrderAccepted.text = "Accepted"
+        }
+        else{
+            holder.tvOrderAccepted.text = "New"
+        }
         items.add(holder.card)
     }
     inner class ViewHolder
@@ -52,8 +57,9 @@ class OrderItemAdapter (
     ):RecyclerView.ViewHolder(itemView){
         val tvOrderTime: TextView = itemView.findViewById(R.id.tv_order_time)
         val tvOrderTable: TextView = itemView.findViewById(R.id.tv_order_table)
+        val tvOrderPrice: TextView = itemView.findViewById(R.id.tv_order_price)
+        val tvOrderAccepted: TextView = itemView.findViewById(R.id.tv_order_accepted)
         val card: CardView = itemView.findViewById(R.id.cv_orders)
-
         init{
             itemView.setOnClickListener {
                 listener.onItemClick(adapterPosition)

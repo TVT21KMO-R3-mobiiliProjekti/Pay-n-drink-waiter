@@ -1,6 +1,6 @@
 package com.example.payndrink
 
-import com.example.payndrink.database.DatabaseAccess
+import com.example.payndrinkwaiter.database.DatabaseAccess
 import junit.framework.TestCase.*
 import org.junit.Test
 

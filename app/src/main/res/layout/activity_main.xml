@@ -11,10 +11,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/btn_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="REFRESH"
+            android:background="@drawable/rounded"
+            android:layout_margin="10dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_orders"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="5dp"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
