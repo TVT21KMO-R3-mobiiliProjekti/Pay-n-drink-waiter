@@ -41,6 +41,7 @@ class ShoppingCartActivity : AppCompatActivity() {
         tvOrder = findViewById(R.id.tv_order)
         tvOrder.text = String.format("ORDER TABLE %s", seatID.toString())
         bAccept = findViewById(R.id.btnAccept)
+        bDelivered = findViewById(R.id.btnDeliver)
         if(intent.getBooleanExtra("accepted", false)){
             bAccept.isEnabled = false
             bDelivered.isEnabled = true
@@ -83,15 +84,22 @@ class ShoppingCartActivity : AppCompatActivity() {
                 ).show()
             }
         }
-        bDelivered = findViewById(R.id.btnDeliver)
         bDelivered.setOnClickListener{
-            if(connection?.let { it1 -> dbAccess.fullfillOrder(it1, orderID!!) } == seatID){
-                Toast.makeText(
-                    this@ShoppingCartActivity,
-                    String.format("Order %s fulfilled", orderID.toString()),
-                    Toast.LENGTH_SHORT
-                ).show()
-                finish()
+            for(item in itemList){
+                if(item.selected){
+                    connection?.let { it1 -> dbAccess.setItemDelivered(it1, item.id, item.deliverQty) }
+                }
+            }
+            updateView()
+            if(itemList.size == 0) {
+                if (connection?.let { it1 -> dbAccess.fullfillOrder(it1, orderID!!) } == seatID) {
+                    Toast.makeText(
+                        this@ShoppingCartActivity,
+                        String.format("Order %s fulfilled", orderID.toString()),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                }
             }
         }
         updateView()
@@ -105,10 +113,12 @@ class ShoppingCartActivity : AppCompatActivity() {
         if(orderID!! > 0) {
             items = orderID?.let { connection?.let { it1 -> dbAccess.getItemsInOrder(it1, it) } }!!
             for (item in items) {
-                val price = connection?.let { dbAccess.getItemPrice(it, item.itemID) }
-                itemList = itemList + ShoppingcartItem(item.id, item.itemName, item.quantity, price, item.delivered)
+                val notDelivered = item.quantity - item.delivered!!
+                val deliverQty = notDelivered
+                if(notDelivered > 0){
+                    itemList = itemList + ShoppingcartItem(item.id, item.itemName, item.quantity, item.delivered, notDelivered, true, deliverQty)
+                }
             }
-
             adapter = ShoppingcartItemAdapter(itemList)
             shoppingcartRecyclerView.layoutManager = layoutManager
             shoppingcartRecyclerView.setHasFixedSize(true)
@@ -117,6 +127,7 @@ class ShoppingCartActivity : AppCompatActivity() {
                 override fun onItemClick(position: Int) {
                 }
             })
+            adapter.notifyDataSetChanged()
         }
     }
 }
