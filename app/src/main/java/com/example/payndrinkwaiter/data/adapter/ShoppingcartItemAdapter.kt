@@ -11,6 +11,8 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.payndrinkwaiter.R
 import com.example.payndrinkwaiter.data.model.ShoppingcartItem
+import com.example.payndrinkwaiter.database.DatabaseAccess
+import java.sql.Connection
 
 class ShoppingcartItemAdapter (
     private val shoppingcartItemList: List<ShoppingcartItem>
@@ -36,25 +38,23 @@ class ShoppingcartItemAdapter (
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tvName.text = shoppingcartItemList[position].itemName
-        var price: Double? = shoppingcartItemList[position].itemQty.let {
-            shoppingcartItemList[position].itemPrice?.times(it)
-        }
-        holder.tvPrice.text = String.format("%.2f %s", price, "€")
-        holder.tvQty.setText(shoppingcartItemList[position].itemQty.toString())
+        holder.tvQty.setText(shoppingcartItemList[position].deliverQty.toString())
         holder.bPlus.setOnClickListener{
-            shoppingcartItemList[position].itemQty = shoppingcartItemList[position].itemQty.plus(1)
-            holder.tvQty.setText(shoppingcartItemList[position].itemQty.toString())
-            price = price?.plus(shoppingcartItemList[position].itemPrice!!)
-            holder.tvPrice.text = String.format("%.2f %s", price, "€")
+            shoppingcartItemList[position].deliverQty = shoppingcartItemList[position].deliverQty.plus(1)
+            if(shoppingcartItemList[position].deliverQty > shoppingcartItemList[position].notDeliveredQty){
+                shoppingcartItemList[position].deliverQty = shoppingcartItemList[position].notDeliveredQty
+            }
+            holder.tvQty.setText(shoppingcartItemList[position].deliverQty.toString())
         }
         holder.bMinus.setOnClickListener{
-            if(shoppingcartItemList[position].itemQty > 0) {
-                shoppingcartItemList[position].itemQty =
-                    shoppingcartItemList[position].itemQty.minus(1)
-                holder.tvQty.setText(shoppingcartItemList[position].itemQty.toString())
-                price = price?.minus(shoppingcartItemList[position].itemPrice!!)
-                holder.tvPrice.text = String.format("%.2f %s", price, "€")
+            if(shoppingcartItemList[position].deliverQty > 0) {
+                shoppingcartItemList[position].deliverQty =
+                    shoppingcartItemList[position].deliverQty.minus(1)
+                holder.tvQty.setText(shoppingcartItemList[position].deliverQty.toString())
             }
+        }
+        holder.cbDeliver.setOnCheckedChangeListener { _, isChecked ->
+            shoppingcartItemList[position].selected = isChecked
         }
         items.add(holder.card)
     }
@@ -68,7 +68,6 @@ class ShoppingcartItemAdapter (
         listener: OnItemClickListener
     ):RecyclerView.ViewHolder(itemView){
         val tvName: TextView = itemView.findViewById(R.id.name_text_view)
-        val tvPrice: TextView = itemView.findViewById(R.id.tv_price)
         val tvQty: EditText = itemView.findViewById(R.id.edtQTY)
         val bPlus: Button = itemView.findViewById(R.id.btnPlus)
         val bMinus: Button = itemView.findViewById(R.id.btnMinus)

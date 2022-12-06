@@ -131,8 +131,8 @@ class DatabaseAccess {
         return waiter
     }
 
-    fun getItemPrice(connection: Connection, itemID: Int): Double?{
-        var price: Double? = null
+    fun getItemPrice(connection: Connection, itemID: Int): Double{
+        var price = 0.00
         val query = "SELECT price FROM item WHERE id_item=$itemID"
         val result = connection.prepareStatement(query).executeQuery()
         while(result.next()){
@@ -149,9 +149,23 @@ class DatabaseAccess {
         return quantity
     }
 
+    fun setItemDelivered(connection: Connection, idOrderItem: Int, delivered: Int): Int{
+        var id = 0
+
+        val query = "UPDATE order_has_item SET delivered=delivered+$delivered WHERE " +
+                "id_order_has_item=$idOrderItem RETURNING id_item"
+        val result = connection.prepareStatement(query).executeQuery()
+        while(result.next()){
+            id = result.getInt("id_item")
+        }
+        return id
+    }
+
     fun acceptOrder(connection: Connection, orderID: Int, waiterID: Int): Int{
         var id = 0
-        val query = "UPDATE orders SET id_waiter=$waiterID WHERE id_order=$orderID RETURNING id_seating"
+        val acceptTime = System.currentTimeMillis()
+        val query = "UPDATE orders SET id_waiter=$waiterID,order_accepted=$acceptTime WHERE " +
+                "id_order=$orderID RETURNING id_seating"
         val result = connection.prepareStatement(query).executeQuery()
         while(result.next()){
             id = result.getInt("id_seating")
@@ -161,7 +175,9 @@ class DatabaseAccess {
 
     fun rejectOrder(connection: Connection, orderID: Int, waiterID: Int, refund: Double): Int{
         var id = 0
-        val query = "UPDATE orders SET id_waiter=$waiterID, refund=$refund, refund_reason='Rejected' WHERE id_order=$orderID RETURNING id_seating"
+        val rejectTime = System.currentTimeMillis()
+        val query = "UPDATE orders SET id_waiter=$waiterID, order_rejected=$rejectTime, refund=$refund, " +
+                "refund_reason='Order rejected' WHERE id_order=$orderID RETURNING id_seating"
         val result = connection.prepareStatement(query).executeQuery()
         while(result.next()){
             id = result.getInt("id_seating")
@@ -169,8 +185,8 @@ class DatabaseAccess {
         return id
     }
 
-    fun fullfillOrder(connection: Connection, orderID: Int): Int?{
-        var id: Int? = null
+    fun fullfillOrder(connection: Connection, orderID: Int): Int{
+        var id = 0
         val orderTime = System.currentTimeMillis()
         val query = "UPDATE orders SET order_fullfilled=$orderTime WHERE id_order=$orderID RETURNING id_seating"
         val result = connection.prepareStatement(query).executeQuery()
