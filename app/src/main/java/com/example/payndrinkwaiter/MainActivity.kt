@@ -55,8 +55,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addOrdersToView(){
-        var accepted = false;
         for(order in orders){
+            var accepted = false;
             if(order.placed != null && (order.waiterID == null || order.waiterID == waiterID || order.waiterID == 0) && order.refundReason != "Rejected"){
                 if(order.waiterID == waiterID){
                     accepted = true;

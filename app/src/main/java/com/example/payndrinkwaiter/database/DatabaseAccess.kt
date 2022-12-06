@@ -151,7 +151,6 @@ class DatabaseAccess {
 
     fun setItemDelivered(connection: Connection, idOrderItem: Int, delivered: Int): Int{
         var id = 0
-
         val query = "UPDATE order_has_item SET delivered=delivered+$delivered WHERE " +
                 "id_order_has_item=$idOrderItem RETURNING id_item"
         val result = connection.prepareStatement(query).executeQuery()
@@ -161,11 +160,12 @@ class DatabaseAccess {
         return id
     }
 
-    fun acceptOrder(connection: Connection, orderID: Int, waiterID: Int): Int{
+    fun acceptOrder(connection: Connection, orderID: Int, waiterID: Int, timeToDeliver: Int): Int{
         var id = 0
         val acceptTime = System.currentTimeMillis()
-        val query = "UPDATE orders SET id_waiter=$waiterID,order_accepted=$acceptTime WHERE " +
-                "id_order=$orderID RETURNING id_seating"
+        val exceptedDelivery = acceptTime + timeToDeliver * 60000
+        val query = "UPDATE orders SET id_waiter=$waiterID,order_accepted=$acceptTime," +
+                "expected_delivery=$exceptedDelivery WHERE id_order=$orderID RETURNING id_seating"
         val result = connection.prepareStatement(query).executeQuery()
         while(result.next()){
             id = result.getInt("id_seating")
