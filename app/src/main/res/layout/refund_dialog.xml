@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/edt_refund_amount"
+        android:layout_width="256dp"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:inputType="textPersonName"
+        android:text="@string/currency"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/edt_refund_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/reason_for_refund"
+        android:inputType="textMultiLine"
+        android:maxLength="255"
+        android:minHeight="48dp" />
+</LinearLayout>

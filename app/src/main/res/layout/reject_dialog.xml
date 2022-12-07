@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/rg_reason"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RadioButton
+            android:id="@+id/rb_drunk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/too_drunk" />
+
+        <RadioButton
+            android:id="@+id/rb_noid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/underage_no_id" />
+
+        <RadioButton
+            android:id="@+id/rb_other"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/other" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/edt_reject_reason"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="10dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/reason_for_rejection"
+        android:inputType="textMultiLine"
+        android:maxLength="255"
+        android:autofillHints="" />
+</LinearLayout>
