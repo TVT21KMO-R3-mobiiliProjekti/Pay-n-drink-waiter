@@ -31,11 +31,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().detectNetwork().permitAll().penaltyLog().build())
         setContentView(R.layout.activity_main)
-        btnRefresh = findViewById(R.id.btn_refresh)
-        btnRefresh.setOnClickListener{
-            orders = dbAccess.getNewOrders(connection!!)
-            addOrdersToView()
-        }
         connection = dbAccess.connectToDatabase()
         if(connection != null){
             waiter = connection?.let { dbAccess.getWaiterByID(it, waiterID) }!!
@@ -43,22 +38,25 @@ class MainActivity : AppCompatActivity() {
             orderRecyclerView = findViewById(R.id.rv_orders)
             layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL,
                 false)
-            orders = dbAccess.getNewOrders(connection!!)
             addOrdersToView()
         }
         else{
             Toast.makeText(this@MainActivity, "Unable to connect to database", Toast.LENGTH_SHORT).show()
             finish()
         }
+        btnRefresh = findViewById(R.id.btn_refresh)
+        btnRefresh.setOnClickListener{
+            addOrdersToView()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        orders = dbAccess.getNewOrders(connection!!)
         addOrdersToView()
     }
 
     private fun addOrdersToView(){
+        orders = dbAccess.getNewOrders(connection!!)
         orderList = emptyList()
         for(order in orders){
             var accepted = false

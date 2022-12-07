@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="10dp">
 
     <RadioGroup
         android:id="@+id/rg_reason"
@@ -34,10 +36,11 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="10dp"
+        android:autofillHints=""
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/reason_for_rejection"
         android:inputType="textMultiLine"
         android:maxLength="255"
-        android:autofillHints="" />
+        tools:ignore="TextContrastCheck" />
 </LinearLayout>

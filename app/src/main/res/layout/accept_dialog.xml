@@ -4,9 +4,17 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TableRow
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/how_many_minutes_to_delivery"
+        android:gravity="center_horizontal"
+        android:textSize="14sp" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_margin="20dp"
         android:gravity="center_horizontal">
 

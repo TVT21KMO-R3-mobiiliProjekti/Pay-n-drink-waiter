@@ -6,7 +6,7 @@
 
     <EditText
         android:id="@+id/edt_refund_amount"
-        android:layout_width="256dp"
+        android:layout_width="100dp"
         android:layout_height="48dp"
         android:ems="10"
         android:gravity="center"

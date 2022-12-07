@@ -26,4 +26,5 @@
     <string name="too_drunk">Too drunk</string>
     <string name="reason_for_rejection">Reason for rejection</string>
     <string name="refund_amount">Refund amount</string>
+    <string name="how_many_minutes_to_delivery">How many minutes to delivery?</string>
 </resources>
