@@ -51,6 +51,7 @@ class ShoppingCartActivity : AppCompatActivity(), EstimatedDeliveryTimeSet, Reje
         tvOrder = findViewById(R.id.tv_order)
         tvOrder.text = String.format("ORDER TABLE %s", seatID.toString())
         bAccept = findViewById(R.id.btnAccept)
+        bReject = findViewById(R.id.btnReject)
         bDeliver = findViewById(R.id.btnDeliver)
         bRefund = findViewById(R.id.btnRefund)
         if(intent.getBooleanExtra("accepted", false)){
@@ -59,11 +60,16 @@ class ShoppingCartActivity : AppCompatActivity(), EstimatedDeliveryTimeSet, Reje
             bDeliver.isEnabled = true
             bRefund.isEnabled = true
         }
+        if(intent.getBooleanExtra("rejected", false)){
+            bAccept.isEnabled = false
+            bReject.isEnabled = false
+            bDeliver.isEnabled = false
+            bRefund.isEnabled = true
+        }
         bAccept.setOnClickListener{
             val acceptDialogFragment = AcceptDialogFragment(this@ShoppingCartActivity)
             acceptDialogFragment.show(supportFragmentManager, "Expected Delivery in minutes")
         }
-        bReject = findViewById(R.id.btnReject)
         bReject.setOnClickListener{
             val rejectDialogFragment = RejectDialogFragment(this@ShoppingCartActivity)
             rejectDialogFragment.show(supportFragmentManager, "Reason for rejection")

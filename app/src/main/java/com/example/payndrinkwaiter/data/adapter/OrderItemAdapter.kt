@@ -11,7 +11,7 @@ import com.example.payndrinkwaiter.data.model.OrderItem
 import java.sql.Time
 
 class OrderItemAdapter (
-    private val orderItemList: List<OrderItem>
+    private val orderItemList: List<OrderItem>,
 ): RecyclerView.Adapter<OrderItemAdapter.ViewHolder>(){
     private lateinit var mListener: OnItemClickListener
     interface OnItemClickListener{
@@ -42,8 +42,11 @@ class OrderItemAdapter (
         holder.tvOrderTable.text = orderItemList[position].seat.toString()
         holder.tvOrderTime.text = orderTime.toString()
         holder.tvOrderPrice.text = String.format("Price: %.2f€", orderItemList[position].price)
-        if(orderItemList[position].accepted == true){
+        if(orderItemList[position].accepted){
             holder.tvOrderAccepted.text = "Accepted"
+        }
+        else if(orderItemList[position].rejected){
+            holder.tvOrderAccepted.text = "Rejected"
         }
         else{
             holder.tvOrderAccepted.text = "New"

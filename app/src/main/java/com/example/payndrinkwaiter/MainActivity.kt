@@ -1,19 +1,19 @@
 package com.example.payndrinkwaiter
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.StrictMode
 import android.widget.Button
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.payndrinkwaiter.data.adapter.OrderItemAdapter
+import com.example.payndrinkwaiter.data.model.OrderItem
 import com.example.payndrinkwaiter.database.DatabaseAccess
 import com.example.payndrinkwaiter.database.Order
 import com.example.payndrinkwaiter.database.Waiter
-import com.example.payndrinkwaiter.data.adapter.OrderItemAdapter
-import com.example.payndrinkwaiter.data.model.OrderItem
 import java.sql.Connection
-import java.util.Collections
 
 class MainActivity : AppCompatActivity() {
     private val dbAccess = DatabaseAccess()
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         btnRefresh = findViewById(R.id.btn_refresh)
         btnRefresh.setOnClickListener{
-            orders = dbAccess.getNewOrders(connection!!)!!
+            orders = dbAccess.getNewOrders(connection!!)
             addOrdersToView()
         }
         connection = dbAccess.connectToDatabase()
@@ -43,26 +43,35 @@ class MainActivity : AppCompatActivity() {
             orderRecyclerView = findViewById(R.id.rv_orders)
             layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL,
                 false)
-            orders = dbAccess.getNewOrders(connection!!)!!
+            orders = dbAccess.getNewOrders(connection!!)
             addOrdersToView()
+        }
+        else{
+            Toast.makeText(this@MainActivity, "Unable to connect to database", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
-    override fun onRestart() {
-        super.onRestart()
-        finish();
-        startActivity(intent);
+    override fun onResume() {
+        super.onResume()
+        orders = dbAccess.getNewOrders(connection!!)
+        addOrdersToView()
     }
 
     private fun addOrdersToView(){
+        orderList = emptyList()
         for(order in orders){
-            var accepted = false;
-            if(order.placed != null && (order.waiterID == null || order.waiterID == waiterID || order.waiterID == 0) && order.refundReason != "Rejected"){
-                if(order.waiterID == waiterID){
-                    accepted = true;
+            var accepted = false
+            var rejected = false
+            if(order.placed != null && (order.waiterID == null || order.waiterID == waiterID || order.waiterID == 0)){
+                if(order.accepted != null && order.accepted > 0){
+                    accepted = true
+                }
+                if(order.rejected != null && order.rejected > 0){
+                    rejected = true
                 }
                 val item = OrderItem(order.id, order.price, order.placed, null, order.seat,
-                    waiterID, accepted)
+                    waiterID, accepted, rejected)
                 if(!orderList.contains(item)) {
                     orderList = orderList + item
                 }
@@ -79,6 +88,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("waiter", waiterID)
                 intent.putExtra("price", orderList[position].price)
                 intent.putExtra("accepted", orderList[position].accepted)
+                intent.putExtra("rejected", orderList[position].rejected)
                 startActivity(intent)
                 //Toast.makeText(this@MainActivity, String.format("%.2f€", orders[position].price), Toast.LENGTH_SHORT).show()
             }

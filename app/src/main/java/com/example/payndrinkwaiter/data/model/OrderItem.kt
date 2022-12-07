@@ -9,5 +9,6 @@ data class OrderItem(
     val fulfilled: Long?,
     val seat: Int,
     val waiter: Int?,
-    val accepted: Boolean?
+    val accepted: Boolean = false,
+    val rejected: Boolean = false
 )
