@@ -2,6 +2,7 @@ package com.example.payndrinkwaiter
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.os.StrictMode
 import android.widget.Button
 import android.widget.Toast
@@ -21,11 +22,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var waiter: Waiter
     private lateinit var orderRecyclerView: RecyclerView
     lateinit var orderList: List<OrderItem>
-    private lateinit var orders: MutableList<Order>
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: OrderItemAdapter
     private var waiterID = 1//TODO hardcoded for development purposes
     private lateinit var btnRefresh: Button
+    var handler: Handler = Handler()
+    var runnable: Runnable? = null
+    var delay = 10000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,12 +54,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        handler.postDelayed(Runnable {
+            handler.postDelayed(runnable!!, delay.toLong())
+            addOrdersToView()
+            Toast.makeText(this@MainActivity, "Refreshed", Toast.LENGTH_SHORT).show()
+        }.also { runnable = it }, delay.toLong())
         super.onResume()
-        addOrdersToView()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable!!)
     }
 
     private fun addOrdersToView(){
-        orders = dbAccess.getNewOrders(connection!!)
+        val orders = dbAccess.getNewOrders(connection!!)
         orderList = emptyList()
         for(order in orders){
             var accepted = false

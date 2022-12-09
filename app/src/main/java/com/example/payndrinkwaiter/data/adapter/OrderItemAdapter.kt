@@ -42,7 +42,7 @@ class OrderItemAdapter (
         val orderTime = Time(orderItemList[position].placed)
         holder.tvOrderTable.text = orderItemList[position].seat.toString()
         holder.tvOrderTime.text = orderTime.toString()
-        holder.tvOrderPrice.text = String.format("Price: %.2f€", orderItemList[position].price)
+        holder.tvOrderPrice.text = String.format("%.2f€", orderItemList[position].price)
         if(orderItemList[position].accepted){
             holder.tvOrderAccepted.text = "Accepted"
             holder.card.setCardBackgroundColor(Color.GREEN)
