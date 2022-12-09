@@ -25,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="REFRESH"
-            android:background="@drawable/rounded"
+            android:backgroundTint="@color/purple_700"
+            app:cornerRadius="100dp"
             android:layout_margin="10dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
