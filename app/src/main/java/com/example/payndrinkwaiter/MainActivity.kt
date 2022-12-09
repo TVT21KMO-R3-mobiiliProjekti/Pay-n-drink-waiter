@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         handler.postDelayed(Runnable {
             handler.postDelayed(runnable!!, delay.toLong())
             addOrdersToView()
-            Toast.makeText(this@MainActivity, "Refreshed", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this@MainActivity, "Refreshed", Toast.LENGTH_SHORT).show()
         }.also { runnable = it }, delay.toLong())
         super.onResume()
     }
