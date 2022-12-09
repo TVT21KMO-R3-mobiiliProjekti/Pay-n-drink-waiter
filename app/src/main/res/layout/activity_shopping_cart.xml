@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
@@ -20,40 +21,44 @@
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
 
         <Button
             android:id="@+id/btnAccept"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:background="@drawable/rounded"
+            android:backgroundTint="@color/green"
+            app:cornerRadius="100dp"
             android:text="@string/accept" />
 
         <Button
             android:id="@+id/btnReject"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:background="@drawable/rounded"
-            android:text="@string/reject" />
+            android:backgroundTint="@color/red"
+            android:text="@string/reject"
+            app:cornerRadius="100dp" />
 
     </TableRow>
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
 
         <Button
             android:id="@+id/btnDeliver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:background="@drawable/rounded"
+            app:cornerRadius="100dp"
             android:enabled="false"
             android:text="@string/deliver" />
 
@@ -61,10 +66,9 @@
             android:id="@+id/btnRefund"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:background="@drawable/rounded"
+            app:cornerRadius="100dp"
             android:enabled="false"
             android:text="@string/refund" />
     </TableRow>

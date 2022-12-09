@@ -27,4 +27,9 @@
     <string name="reason_for_rejection">Reason for rejection</string>
     <string name="refund_amount">Refund amount</string>
     <string name="how_many_minutes_to_delivery">How many minutes to delivery?</string>
+    <string name="time">Time</string>
+    <string name="price">Price</string>
+    <string name="new_order">New</string>
+    <string name="table">Table:</string>
+    <string name="orders">ORDERS</string>
 </resources>

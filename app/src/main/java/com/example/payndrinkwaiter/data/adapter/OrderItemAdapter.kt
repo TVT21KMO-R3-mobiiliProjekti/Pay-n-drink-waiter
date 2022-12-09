@@ -1,5 +1,6 @@
 package com.example.payndrinkwaiter.data.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,12 +45,15 @@ class OrderItemAdapter (
         holder.tvOrderPrice.text = String.format("Price: %.2f€", orderItemList[position].price)
         if(orderItemList[position].accepted){
             holder.tvOrderAccepted.text = "Accepted"
+            holder.card.setCardBackgroundColor(Color.GREEN)
         }
         else if(orderItemList[position].rejected){
             holder.tvOrderAccepted.text = "Rejected"
+            holder.card.setCardBackgroundColor(Color.RED)
         }
         else{
             holder.tvOrderAccepted.text = "New"
+            holder.card.setCardBackgroundColor(Color.WHITE)
         }
         items.add(holder.card)
     }
