@@ -1,10 +1,13 @@
 package com.example.payndrinkwaiter
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
 import android.os.StrictMode
-import android.widget.Button
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,10 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.payndrinkwaiter.data.adapter.OrderItemAdapter
 import com.example.payndrinkwaiter.data.model.OrderItem
 import com.example.payndrinkwaiter.database.DatabaseAccess
-import com.example.payndrinkwaiter.database.Order
 import com.example.payndrinkwaiter.database.Waiter
 import java.sql.Connection
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     private val dbAccess = DatabaseAccess()
     private var connection: Connection? = null
@@ -25,15 +28,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: OrderItemAdapter
     private var waiterID = 1//TODO hardcoded for development purposes
-    private lateinit var btnRefresh: Button
-    var handler: Handler = Handler()
-    var runnable: Runnable? = null
-    var delay = 5000
+    private var handler: Handler = Handler()
+    private var runnable: Runnable? = null
+    private var delay = 5000
+    private lateinit var tvNoOrders: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().detectNetwork().permitAll().penaltyLog().build())
         setContentView(R.layout.activity_main)
+        tvNoOrders = findViewById(R.id.tv_no_orders)
+        tvNoOrders.visibility = View.GONE
         connection = dbAccess.connectToDatabase()
         if(connection != null){
             waiter = connection?.let { dbAccess.getWaiterByID(it, waiterID) }!!
@@ -50,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        addOrdersToView()
         handler.postDelayed(Runnable {
             handler.postDelayed(runnable!!, delay.toLong())
             addOrdersToView()
@@ -63,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         handler.removeCallbacks(runnable!!)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun addOrdersToView(){
         val orders = dbAccess.getNewOrders(connection!!)
         orderList = emptyList()
@@ -82,6 +89,12 @@ class MainActivity : AppCompatActivity() {
                     orderList = orderList + item
                 }
             }
+        }
+        if(orderList.isEmpty()){
+            tvNoOrders.visibility = View.VISIBLE
+        }
+        else{
+            tvNoOrders.visibility = View.GONE
         }
         adapter = OrderItemAdapter(orderList)
         orderRecyclerView.layoutManager = layoutManager

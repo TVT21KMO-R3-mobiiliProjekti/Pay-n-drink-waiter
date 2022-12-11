@@ -17,14 +17,22 @@
             android:layout_height="wrap_content"
             android:text="@string/orders"
             android:textAlignment="center"
-            android:textSize="24sp"
-            android:textColor="@color/purple_700"/>
+            android:textColor="@color/purple_700"
+            android:textSize="24sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_orders"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="5dp"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/tv_no_orders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_pending_orders"
+            android:textAlignment="center"
+            />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
