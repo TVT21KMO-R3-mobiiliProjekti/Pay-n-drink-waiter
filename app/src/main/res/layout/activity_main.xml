@@ -20,15 +20,6 @@
             android:textSize="24sp"
             android:textColor="@color/purple_700"/>
 
-        <Button
-            android:id="@+id/btn_refresh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="REFRESH"
-            android:backgroundTint="@color/purple_700"
-            app:cornerRadius="100dp"
-            android:layout_margin="10dp"/>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_orders"
             android:layout_width="match_parent"

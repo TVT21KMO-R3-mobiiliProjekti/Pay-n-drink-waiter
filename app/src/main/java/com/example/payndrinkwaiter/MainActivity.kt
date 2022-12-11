@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnRefresh: Button
     var handler: Handler = Handler()
     var runnable: Runnable? = null
-    var delay = 10000
+    var delay = 5000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,10 +46,6 @@ class MainActivity : AppCompatActivity() {
         else{
             Toast.makeText(this@MainActivity, "Unable to connect to database", Toast.LENGTH_SHORT).show()
             finish()
-        }
-        btnRefresh = findViewById(R.id.btn_refresh)
-        btnRefresh.setOnClickListener{
-            addOrdersToView()
         }
     }
 
