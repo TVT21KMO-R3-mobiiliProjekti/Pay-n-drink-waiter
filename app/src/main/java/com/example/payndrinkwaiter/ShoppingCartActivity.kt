@@ -1,5 +1,6 @@
 package com.example.payndrinkwaiter
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
@@ -90,6 +91,7 @@ class ShoppingCartActivity : AppCompatActivity(), EstimatedDeliveryTimeSet, Reje
         updateView()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateView() {
         connection = dbAccess.connectToDatabase()
         itemList = ArrayList()
@@ -127,7 +129,7 @@ class ShoppingCartActivity : AppCompatActivity(), EstimatedDeliveryTimeSet, Reje
     }
 
     private fun acceptOrder(){
-        if(connection?.let { it1 -> dbAccess.acceptOrder(it1, orderID!!, waiterID!!, deliveryEstimate) }!! == seatID) {
+        if(connection?.let { it1 -> dbAccess.acceptOrder(it1, orderID!!, waiterID!!, deliveryEstimate) }!! > 0) {
             Toast.makeText(
                 this@ShoppingCartActivity,
                 String.format("Order %s accepted", orderID.toString()),
@@ -178,7 +180,7 @@ class ShoppingCartActivity : AppCompatActivity(), EstimatedDeliveryTimeSet, Reje
         }
         updateView()
         if(itemList.isEmpty()) {
-            if (connection?.let { it1 -> dbAccess.fulfillOrder(it1, orderID!!) } == seatID) {
+            if (connection?.let { it1 -> dbAccess.fulfillOrder(it1, orderID!!) } != 0) {
                 Toast.makeText(
                     this@ShoppingCartActivity,
                     String.format("Order %s fulfilled", orderID.toString()),
@@ -201,7 +203,7 @@ class ShoppingCartActivity : AppCompatActivity(), EstimatedDeliveryTimeSet, Reje
         } }
         updateView()
         if(itemList.isEmpty()) {
-            if (connection?.let { it1 -> dbAccess.fulfillOrder(it1, orderID!!) } == seatID) {
+            if (connection?.let { it1 -> dbAccess.fulfillOrder(it1, orderID!!) } != 0) {
                 Toast.makeText(
                     this@ShoppingCartActivity,
                     String.format("Order %s fulfilled", orderID.toString()),
