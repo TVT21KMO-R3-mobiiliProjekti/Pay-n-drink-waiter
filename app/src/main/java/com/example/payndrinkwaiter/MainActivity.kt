@@ -19,7 +19,7 @@ import com.example.payndrinkwaiter.database.Waiter
 import java.sql.Connection
 
 @Suppress("DEPRECATION")
-class MainActivity : AppCompatActivity() {
+class  MainActivity : AppCompatActivity() {
     private val dbAccess = DatabaseAccess()
     private var connection: Connection? = null
     private lateinit var waiter: Waiter
